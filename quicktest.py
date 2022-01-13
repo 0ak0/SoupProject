@@ -1,15 +1,19 @@
-import random
+from PIL import Image
 
-addition = 0
-colorlist = []
-for i in range(256):
-    colorlist.append(addition)
-    addition += 1
+img = Image.open("ref/Body.png")
+cid = img.getdata()
 
-colorchoices = []
+new_image = []
+for item in cid:
 
-for x in range(6):
-    colorchoices.append(random.choice(colorlist))
+    if item[0] in list(range(200, 256)):
+        new_image.append((255, 224, 100))
+    else:
+        new_image.append(item)
 
-print("Color 1 is : " + str(colorchoices[0]) + " " + str(colorchoices[1]) + " " + str(colorchoices[2]))
-print("Color 2 is : " + str(colorchoices[3]) + " " + str(colorchoices[4]) + " " + str(colorchoices[5]))
+# update image data
+img.putdata(new_image)
+
+
+# save new image
+img.show()
