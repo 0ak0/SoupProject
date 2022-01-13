@@ -1,4 +1,4 @@
-from PIL import Image, EpsImagePlugin
+from PIL import Image, ImageDraw, EpsImagePlugin
 from turtle import Screen, Turtle
 import random
 import shutil
@@ -6,7 +6,7 @@ import shutil
 # import background
 # from background import topcolor, bottomcolor, screen, height, width
 
-#  use my jank-ass method of creating a gradient background
+#  uses this janky method of creating a gradient background with turtle
 
 #  create a gradient image using turtle
 #  find 6 (3 + 3) random values for the rgb of 2 colors
@@ -70,10 +70,7 @@ back = Image.open("temp/background_convert.png").convert("RGBA")
 top = Image.open("ref/Top.png").convert("RGBA")
 can = Image.open("ref/Body.png").convert("RGBA")
 
-shutil.copy("ref/Body.png", "temp/Body.png")
-newcan = Image.open("temp/Body.png")
-
-cid = can.getdata()
+newcan = Image.open("ref/Body.png")
 
 cancolorlist = []
 
@@ -91,7 +88,7 @@ for x in range(3):
 for i in range(0, 1080):  # process all pixels
     for j in range(0, 1080):
         data = newcan.getpixel((i, j))
-        if data[0] >= 200 and data[1] >= 200 and data[2] >= 200: # use >= 200 just because it works better(tm)
+        if data[0] >= 200 and data[1] >= 200 and data[2] >= 200:  # use >= 200 just because it works better(tm)
             newcan.putpixel((i, j), (cancolor[0], cancolor[1], cancolor[2]))
 
 print("Can Color is: " + str(cancolor[0]) + ", " + str(cancolor[1]) + ", " + str(cancolor[2]))
@@ -99,10 +96,27 @@ print("Can Color is: " + str(cancolor[0]) + ", " + str(cancolor[1]) + ", " + str
 newcan.save("temp/newcan.png", format="png")
 
 newcan = Image.open("temp/newcan.png").convert("RGBA")
+
+line = Image.open("ref/Line.png").convert("RGBA")
+
+
+for i in range(0, 1080):  # same method for recolor as above
+    for j in range(0, 4):
+        data = line.getpixel((i, j))
+        if data[0] >= 200 and data[1] >= 200 and data[2] >= 200:
+            line.putpixel((i, j), (int(topcolor[0]), int(topcolor[1]), int(topcolor[2])))
+            # this is creating a line to fix whitespace at the top
+
+line.save("temp/linefix.png", format="png")
+
+linefix = Image.open("temp/linefix.png").convert("RGBA")
+
 shade = Image.open("ref/Shading.png").convert("RGBA")
 bottom = Image.open("ref/Bottom.png").convert("RGBA")
 
+
 bg.paste(back, (0, 0), back)
+bg.paste(linefix, (0, 0), linefix)
 bg.paste(bottom, (0, 0), bottom)
 bg.paste(newcan, (0, 0), newcan)
 bg.paste(shade, (0, 0), shade)
