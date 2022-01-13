@@ -105,7 +105,7 @@ for i in range(0, 1080):  # same method for recolor as above
         data = line.getpixel((i, j))
         if data[0] >= 200 and data[1] >= 200 and data[2] >= 200:
             line.putpixel((i, j), (int(topcolor[0]), int(topcolor[1]), int(topcolor[2])))
-            # this is creating a line to fix whitespace at the top
+            # this is creating a line to fix whitespace at the top, hence fill with gradient top color
 
 line.save("temp/linefix.png", format="png")
 
